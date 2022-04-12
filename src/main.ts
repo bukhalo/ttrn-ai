@@ -8,10 +8,9 @@ const sessionClient = new dialogflow.SessionsClient();
 
 bot.on('message', async ctx => {
   const projectId = process.env.PROJECT_ID!;
-  const sessionId = `${ctx.chat?.id}:${ctx.from?.id}`;
   const sessionPath = sessionClient.projectAgentSessionPath(
     projectId,
-    sessionId
+    String(ctx.message.message_id)
   );
   const responses = await sessionClient.detectIntent({
     session: sessionPath,
@@ -28,4 +27,5 @@ bot.on('message', async ctx => {
   }
 });
 
+bot.catch(e => console.error(e))
 bot.start();
